@@ -1,12 +1,12 @@
 // example import asset
 // import imgPath from './assets/img.jpg';
 
-// TODO : add Dat.GUI
-// TODO : add Stats
+// TODO: add Dat.GUI
 
 import texturePath from './../assets/texture.jpg';
 
 var OrbitControls = require('three-orbit-controls')(THREE)
+let Stats = require('stats.js');
 
 export default class App {
 
@@ -27,6 +27,9 @@ export default class App {
         let texture = textureLoader.load(texturePath)
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
+        this.stats = new Stats();
+        this.stats.showPanel(0);
+        document.body.appendChild(this.stats.dom);
         texture.repeat.set( 6, 6 );
         let material = new THREE.MeshLambertMaterial({color: 0xffffff, map: texture});
 
@@ -48,13 +51,13 @@ export default class App {
     }
 
     render() {
+        this.stats.begin();
 
         this.mesh.rotation.x += 0.01;
         this.mesh.rotation.y += 0.02;
+        this.renderer.render( this.scene, this.camera );
 
-
-
-    	this.renderer.render( this.scene, this.camera );
+        this.stats.end();
     }
 
     onWindowResize() {
