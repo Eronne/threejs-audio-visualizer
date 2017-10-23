@@ -3,9 +3,11 @@
 
 // TODO: add Dat.GUI
 
-import texturePath from './../assets/texture.jpg';
+import texturePath from './../assets/img/texture.jpg'
+import Sound from './Sound'
+import music from './../assets/sounds/music.mp3'
 
-var OrbitControls = require('three-orbit-controls')(THREE)
+let OrbitControls = require('three-orbit-controls')(THREE)
 let Stats = require('stats.js');
 
 export default class App {
@@ -13,23 +15,26 @@ export default class App {
     constructor() {
 
         this.container = document.querySelector( '#main' );
-    	document.body.appendChild( this.container );
+        document.body.appendChild( this.container );
+        
+        this.stats = new Stats();
+        this.stats.showPanel(0);
+        document.body.appendChild(this.stats.dom);
 
         this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 10 );
         this.camera.position.z = 4;
-        var controls = new OrbitControls(this.camera)
-
+        let controls = new OrbitControls(this.camera)
 
         this.scene = new THREE.Scene();
+
+        let axisHelper = new THREE.AxisHelper( 5 )
+        this.scene.add( axisHelper )
         
         let geometry = new THREE.TorusKnotGeometry( 0.5, 0.19, 300, 20 );        
         let textureLoader = new THREE.TextureLoader();
         let texture = textureLoader.load(texturePath)
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
-        this.stats = new Stats();
-        this.stats.showPanel(0);
-        document.body.appendChild(this.stats.dom);
         texture.repeat.set( 6, 6 );
         let material = new THREE.MeshLambertMaterial({color: 0xffffff, map: texture});
 
@@ -48,6 +53,12 @@ export default class App {
         this.onWindowResize();
 
         this.renderer.animate( this.render.bind(this) );
+
+        this.audio = new Sound(music, null, null, null, true);
+        this.audio._load(music, () => {
+            this.audio.play();
+        })
+
     }
 
     render() {
