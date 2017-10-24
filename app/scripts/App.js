@@ -10,10 +10,26 @@ import music from './../assets/sounds/music.mp3'
 let OrbitControls = require('three-orbit-controls')(THREE)
 let Stats = require('stats.js');
 
+let nbEllipse = 65;
+let arrayEllipse = [];
+
+let time = Date.now() / 1000;
+
 export default class App {
 
     constructor() {
+        this.createScene()
+        this.createLights()
+        this.createEllipse()
+        this.renderer()
+        this.importAudio()
+    	
 
+    	window.addEventListener('resize', this.onWindowResize.bind(this), false);
+        this.onWindowResize();
+    }
+
+    createScene() {
         this.container = document.querySelector( '#main' );
         document.body.appendChild( this.container );
         
@@ -21,51 +37,71 @@ export default class App {
         this.stats.showPanel(0);
         document.body.appendChild(this.stats.dom);
 
-        this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 10 );
-        this.camera.position.z = 4;
+        this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 100 );
+        this.camera.position.z = 20;
         let controls = new OrbitControls(this.camera)
 
         this.scene = new THREE.Scene();
 
         let axisHelper = new THREE.AxisHelper( 5 )
         this.scene.add( axisHelper )
-        
-        let geometry = new THREE.TorusKnotGeometry( 0.5, 0.19, 300, 20 );        
-        let textureLoader = new THREE.TextureLoader();
-        let texture = textureLoader.load(texturePath)
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set( 6, 6 );
-        let material = new THREE.MeshLambertMaterial({color: 0xffffff, map: texture});
+    }
 
-        this.mesh = new THREE.Mesh( geometry, material );
-        this.scene.add( this.mesh );
-
+    createLights() {
         let directionalLight = new THREE.DirectionalLight( 0xffffff, 1.3 );
         this.scene.add( directionalLight )
+    }
 
-    	this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+    createEllipse() {
+        this.groupEllipse = new THREE.Group();
+        
+        
+                for (var i = 0; i < nbEllipse; i++) {
+                    var curve = new THREE.EllipseCurve(
+                        0,  0,            // ax, aY
+                        10, 10,           // xRadius, yRadius
+                        0,  2 * Math.PI,  // aStartAngle, aEndAngle
+                        false,            // aClockwise
+                        Math.PI / 2           // aRotation
+                    );
+                    
+                    var path = new THREE.Path( curve.getPoints( 100 ) );
+                    var geometry = path.createPointsGeometry( 100 );
+                    var material = new THREE.LineBasicMaterial( { color : 0xd2a0a4 } );
+                    
+                    // Create the final object to add to the scene
+                    this.ellipse = new THREE.Line( geometry, material );
+                    this.ellipse.rotation.x += Math.cos(time) * i
+                    arrayEllipse.push(this.ellipse);
+                    
+                    this.groupEllipse.add( this.ellipse );
+                }
+        
+                this.scene.add(this.groupEllipse)
+    }
+
+    renderer() {
+        this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
     	this.renderer.setPixelRatio( window.devicePixelRatio );
     	this.renderer.setSize( window.innerWidth, window.innerHeight );
-    	this.container.appendChild( this.renderer.domElement );
-
-    	window.addEventListener('resize', this.onWindowResize.bind(this), false);
-        this.onWindowResize();
-
+        this.container.appendChild( this.renderer.domElement );
+        
         this.renderer.animate( this.render.bind(this) );
+    }
 
+    importAudio() {
         this.audio = new Sound(music, null, null, null, true);
         this.audio._load(music, () => {
-            this.audio.play();
+            // this.audio.play();
         })
-
     }
 
     render() {
         this.stats.begin();
 
-        this.mesh.rotation.x += 0.01;
-        this.mesh.rotation.y += 0.02;
+        this.groupEllipse.rotation.x += Math.cos(time) * 0.01
+        this.groupEllipse.rotation.y += Math.sin(time) * 0.01
+
         this.renderer.render( this.scene, this.camera );
 
         this.stats.end();

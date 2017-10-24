@@ -28,7 +28,8 @@
     "uglify-js": "2.8.29",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^2.7.0",
-    "webpack-dev-server": "^2.4.5"
+    "webpack-dev-server": "^2.4.5",
+    "webpack-glsl-loader": "^1.0.1"
   },
   "dependencies": {
     "webvr-polyfill": "^0.9.38",

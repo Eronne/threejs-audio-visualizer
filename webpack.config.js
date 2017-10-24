@@ -78,6 +78,10 @@ module.exports = function(env) {
                 })
             },
             {
+                test: [/\.vert$/, /\.frag$/],
+                loader: 'webpack-glsl-loader'
+            },
+            {
                 test: /\.tif$/,
                 use: {
                     loader: 'file-loader'
