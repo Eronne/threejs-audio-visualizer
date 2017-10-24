@@ -10,6 +10,8 @@ let arrayEllipse = [];
 
 let time = Date.now() / 1000;
 
+let debug = true;
+
 export default class App {
 
     constructor() {
@@ -17,6 +19,9 @@ export default class App {
         this.createEllipse()
         this.renderer()
         this.importAudio()
+        if (debug) {
+            this.debug()
+        }
     	
 
     	window.addEventListener('resize', this.onWindowResize.bind(this), false);
@@ -34,11 +39,10 @@ export default class App {
         this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 100 );
         this.camera.position.z = 30;
         let controls = new OrbitControls(this.camera)
+        controls.minDistance = 30;
+        controls.maxDistance = 40;
 
         this.scene = new THREE.Scene();
-
-        let axisHelper = new THREE.AxisHelper( 5 )
-        this.scene.add( axisHelper )
     }
 
     createEllipse() {
@@ -68,6 +72,10 @@ export default class App {
         this.groupEllipse.rotation.x += Math.cos(time) * 0.005
         this.groupEllipse.rotation.y += Math.sin(time) * 0.01
 
+        for (var i = 0; i < nbEllipse; i++) {
+            arrayEllipse[i].curve.aX += 20
+        }
+
         this.renderer.render( this.scene, this.camera );
 
         this.stats.end();
@@ -85,5 +93,10 @@ export default class App {
     	this.camera.aspect = window.innerWidth / window.innerHeight;
     	this.camera.updateProjectionMatrix();
     	this.renderer.setSize( window.innerWidth, window.innerHeight );
+    }
+
+    debug() {
+        let axisHelper = new THREE.AxisHelper( 20 )
+        this.scene.add( axisHelper )
     }
 }
