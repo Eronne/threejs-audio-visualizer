@@ -2,15 +2,13 @@ import Ellipse from './Ellipse'
 import Sound from './Sound'
 import music from './../assets/sounds/music.mp3'
 
-let OrbitControls = require('three-orbit-controls')(THREE)
-let Stats = require('stats.js');
-
-let nbEllipse = 65;
-let arrayEllipse = [];
-
-let time = Date.now() / 1000;
-
-let debug = true;
+let OrbitControls = require('three-orbit-controls')(THREE),
+    Stats = require('stats.js'),
+    nbEllipse = 65,
+    arrayEllipse = [],
+    time = Date.now() / 1000,
+    playSound = false,
+    debug = false;
 
 export default class App {
 
@@ -49,7 +47,7 @@ export default class App {
         this.groupEllipse = new THREE.Group();
 
         for (let i = 0; i < nbEllipse; i++) {            
-            let ellipse = new Ellipse(0, 0, 10, 10, 0, 2 * Math.PI, false, 0)
+            let ellipse = new Ellipse(0, 0, 10, 10, 0, 2 * Math.PI, false, 0, i)
             arrayEllipse.push(ellipse);
             this.groupEllipse.add( ellipse.line );
         }
@@ -72,10 +70,6 @@ export default class App {
         this.groupEllipse.rotation.x += Math.cos(time) * 0.005
         this.groupEllipse.rotation.y += Math.sin(time) * 0.01
 
-        for (var i = 0; i < nbEllipse; i++) {
-            arrayEllipse[i].curve.aX += 20
-        }
-
         this.renderer.render( this.scene, this.camera );
 
         this.stats.end();
@@ -83,9 +77,23 @@ export default class App {
 
     importAudio() {
         this.audio = new Sound(music, null, null, null, true);
-        this.audio._load(music, () => {
-            // this.audio.play();
+        this.kick = this.audio.createKick({
+            frequency: [100, 150],
+            threshold: 90,
+            decay: 1,
+            onKick: () => {
+                console.log('On kick')
+            },
+            offKick: () => {
+
+            }
         })
+        this.kick.on();
+        if (playSound) {
+            this.audio._load(music, () => {
+                this.audio.play();
+            })
+        }
     }
 
     onWindowResize() {

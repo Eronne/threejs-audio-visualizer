@@ -1,7 +1,8 @@
 let time = Date.now() / 1000;
 
 export default class Ellipse {
-    constructor(aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation) {
+
+    constructor(aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation, counter) {
         this.curve = new THREE.EllipseCurve(
             aX, aY,
             xRadius, yRadius,
@@ -15,6 +16,6 @@ export default class Ellipse {
         let material = new THREE.LineBasicMaterial( { color : 0xd2a0a4 } );
 
         this.line = new THREE.Line( geometry, material );
-        this.line.rotation.x += Math.cos(time) * Math.random() * (10 - 0) + 0
+        this.line.rotation.x += Math.cos(time) * counter
     }
 }
