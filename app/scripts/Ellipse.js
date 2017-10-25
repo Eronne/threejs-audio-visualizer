@@ -27,6 +27,9 @@ export default class Ellipse {
                     u_time: { value: 1.0, type: 'f' }
                  }
             ] ),
+            defines: {
+                USE_ENVMAP: true
+            },
                 // Todo: Change color
                 // color : 0xd2a0a4
             vertexShader: vertex,

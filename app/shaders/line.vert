@@ -136,9 +136,7 @@ void main() {
 
 	#include <begin_vertex>
 
-	transformed.y += (snoise(u_time + transformed * .03) * 3.);
-	transformed.y += (snoise(u_time + transformed * .03) * 3.);
-    transformed.z += (snoise(u_time + transformed * .03) * 3.);
+	transformed.xy += (snoise(u_time + transformed * .03) * 3.);
 
 	#include <morphtarget_vertex>
 	#include <skinning_vertex>

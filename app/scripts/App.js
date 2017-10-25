@@ -1,14 +1,16 @@
 import Ellipse from './Ellipse'
+import utils from './../helpers/utils'
 import Sound from './Sound'
 import music from './../assets/sounds/music.mp3'
 
 let OrbitControls = require('three-orbit-controls')(THREE),
     Stats = require('stats.js'),
-    nbEllipse = 300,
+    nbEllipse = 250,
     arrayEllipse = [],
-    rotationValue = Date.now() / 1000,
+    rotationValue = 10,
     time = 0,
-    playSound = false,
+    enableRotation = true,
+    playSound = true,
     debug = false;
 
 export default class App {
@@ -48,7 +50,7 @@ export default class App {
         this.groupEllipse = new THREE.Group();
 
         for (let i = 0; i < nbEllipse; i++) {            
-            let ellipse = new Ellipse(0, 0, 10, 10, 0, 2 * Math.PI, false, 0, rotationValue, i)
+            let ellipse = new Ellipse(0, 0, 10, 10, 0, Math.PI, false, 0, rotationValue, i)
             arrayEllipse.push(ellipse);
             this.groupEllipse.add( ellipse.line );
         }
@@ -68,14 +70,24 @@ export default class App {
     render() {
         this.stats.begin();         
 
-        this.groupEllipse.rotation.x += Math.cos(rotationValue) * 0.005
-        this.groupEllipse.rotation.y += Math.sin(rotationValue) * 0.01
+        if (enableRotation) {
+            this.groupEllipse.rotation.x += Math.cos(rotationValue) * 0.005
+            this.groupEllipse.rotation.y += Math.sin(rotationValue) * 0.01
+        }
 
-        time += 0.016
+        if (playSound) {
+            this.midAverage = utils.arrAverage(this.audio.getSpectrum()) / 200
+            
+            arrayEllipse.forEach(ellipse => {
+                ellipse.update(this.midAverage)
+            })
+        } else {
+            time += 0.016;
 
-        arrayEllipse.forEach(ellipse => {
-            ellipse.update(time)
-        })
+            arrayEllipse.forEach(ellipse => {
+                ellipse.update(time)
+            })
+        }
 
         this.renderer.render( this.scene, this.camera );
 
@@ -83,13 +95,17 @@ export default class App {
     }
 
     importAudio() {
-        this.audio = new Sound(music, null, null, null, true);
+        if (debug) {
+            this.audio = new Sound(music, null, null, null, true);
+        } else {
+            this.audio = new Sound(music, null, null, null, false);
+        }
         this.kick = this.audio.createKick({
             frequency: [100, 150],
             threshold: 90,
             decay: 1,
             onKick: () => {
-                console.log('kick')
+                time += 0.016
             },
             offKick: () => {
                 
