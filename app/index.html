@@ -7,7 +7,33 @@
     <title>Three.js - Experiment</title>
 </head>
 <body>
+    <div class="controls" id="controls">
+        <button>
+            <img src="./assets/img/play.svg" alt="Play or Pause">
+        </button>
+
+        <button>
+            <img id="fullScreen" src="./assets/img/full_screen.svg" alt="Full screen">
+        </button>
+    </div>
     <div id="main"></div>
+    <script>
+        document.addEventListener('mousemove', () => {
+            let controls = document.getElementById('controls');
+            controls.classList.add("visible")
+        })
+
+        document.getElementById('fullScreen').addEventListener('click', function () {
+            var target = document.getElementById('main')
+
+            if(target.webkitRequestFullScreen) {
+                target.webkitRequestFullScreen();
+            }
+            else {
+                target.mozRequestFullScreen();
+            }
+        });
+    </script>
 </body>
 </html>
 

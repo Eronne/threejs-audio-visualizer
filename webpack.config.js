@@ -71,7 +71,7 @@ module.exports = function(env) {
                         presets: ['env']
                     }
                 }
-             },{
+            },{
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
                     use: 'css-loader'
@@ -80,12 +80,6 @@ module.exports = function(env) {
             {
                 test: [/\.vert$/, /\.frag$/],
                 loader: 'webpack-glsl-loader'
-            },
-            {
-                test: /\.tif$/,
-                use: {
-                    loader: 'file-loader'
-                }
             },
             {
                 test: [/\.mp3$/, /\.dae$/, /\.jpg$/, /\.obj$/, /\.fbx$/],

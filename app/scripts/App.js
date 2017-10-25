@@ -4,9 +4,10 @@ import music from './../assets/sounds/music.mp3'
 
 let OrbitControls = require('three-orbit-controls')(THREE),
     Stats = require('stats.js'),
-    nbEllipse = 65,
+    nbEllipse = 300,
     arrayEllipse = [],
-    time = Date.now() / 1000,
+    rotationValue = Date.now() / 1000,
+    time = 0,
     playSound = false,
     debug = false;
 
@@ -47,7 +48,7 @@ export default class App {
         this.groupEllipse = new THREE.Group();
 
         for (let i = 0; i < nbEllipse; i++) {            
-            let ellipse = new Ellipse(0, 0, 10, 10, 0, 2 * Math.PI, false, 0, i)
+            let ellipse = new Ellipse(0, 0, 10, 10, 0, 2 * Math.PI, false, 0, rotationValue, i)
             arrayEllipse.push(ellipse);
             this.groupEllipse.add( ellipse.line );
         }
@@ -67,8 +68,14 @@ export default class App {
     render() {
         this.stats.begin();         
 
-        this.groupEllipse.rotation.x += Math.cos(time) * 0.005
-        this.groupEllipse.rotation.y += Math.sin(time) * 0.01
+        this.groupEllipse.rotation.x += Math.cos(rotationValue) * 0.005
+        this.groupEllipse.rotation.y += Math.sin(rotationValue) * 0.01
+
+        time += 0.016
+
+        arrayEllipse.forEach(ellipse => {
+            ellipse.update(time)
+        })
 
         this.renderer.render( this.scene, this.camera );
 
@@ -82,10 +89,10 @@ export default class App {
             threshold: 90,
             decay: 1,
             onKick: () => {
-                console.log('On kick')
+                console.log('kick')
             },
             offKick: () => {
-
+                
             }
         })
         this.kick.on();
