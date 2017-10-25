@@ -27,7 +27,6 @@ html, body {
 
 button {
     margin-left: 15px;
-    padding: 10px;
     background-color: transparent;
     border: none;
     opacity: 0.3;
@@ -38,6 +37,10 @@ button {
 button:hover {
     cursor: pointer;
     opacity: 1;
+}
+
+img {
+    padding: 10px;
 }
 
 .author {

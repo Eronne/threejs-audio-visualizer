@@ -42,8 +42,11 @@ export default class App {
         this.camera.position.z = 30;
 
         let controls = new OrbitControls(this.camera, this.container)
-        controls.minDistance = 30;
+        controls.minDistance = 10;
         controls.maxDistance = 40;
+		controls.enableDamping = true;
+		controls.dampingFactor = 0.07;
+		controls.rotateSpeed = 0.07;
 
         this.scene = new THREE.Scene();
     }
