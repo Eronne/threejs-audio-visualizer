@@ -5,12 +5,13 @@ import music from './../assets/sounds/music.mp3'
 
 let OrbitControls = require('three-orbit-controls')(THREE),
     Stats = require('stats.js'),
-    nbEllipse = 250,
+    nbEllipse = 180,
     arrayEllipse = [],
     rotationValue = 10,
     time = 0,
     enableRotation = true,
     playSound = true,
+    volume = true,
     debug = false;
 
 export default class App {
@@ -20,10 +21,10 @@ export default class App {
         this.createEllipse()
         this.renderer()
         this.importAudio()
+        this.importControls()
         if (debug) {
             this.debug()
         }
-    	
 
     	window.addEventListener('resize', this.onWindowResize.bind(this), false);
         this.onWindowResize();
@@ -39,7 +40,8 @@ export default class App {
 
         this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 100 );
         this.camera.position.z = 30;
-        let controls = new OrbitControls(this.camera)
+
+        let controls = new OrbitControls(this.camera, this.container)
         controls.minDistance = 30;
         controls.maxDistance = 40;
 
@@ -49,13 +51,12 @@ export default class App {
     createEllipse() {
         this.groupEllipse = new THREE.Group();
 
-        for (let i = 0; i < nbEllipse; i++) {            
-            let ellipse = new Ellipse(0, 0, 10, 10, 0, Math.PI, false, 0, rotationValue, i)
+        for (let i = 0; i < nbEllipse; i++) {
+            let ellipse = new Ellipse(0, 0, 10, 10, 0, 2* Math.PI, false, 0, rotationValue, i)
             arrayEllipse.push(ellipse);
             this.groupEllipse.add( ellipse.line );
+            this.scene.add(this.groupEllipse)
         }
-
-        this.scene.add(this.groupEllipse)
     }
 
     renderer() {
@@ -101,11 +102,11 @@ export default class App {
             this.audio = new Sound(music, null, null, null, false);
         }
         this.kick = this.audio.createKick({
-            frequency: [100, 150],
-            threshold: 90,
+            frequency: [100, 120],
+            threshold: 55,
             decay: 1,
             onKick: () => {
-                time += 0.016
+
             },
             offKick: () => {
                 
@@ -117,6 +118,45 @@ export default class App {
                 this.audio.play();
             })
         }
+    }
+
+    importControls() {
+        document.addEventListener('mousemove', () => {
+            let controls = document.getElementById('controls');
+            controls.classList.add("visible")
+
+            let author = document.getElementById('author');
+            author.classList.add("visible")
+        })
+
+        document.getElementById('mute').addEventListener('click', () => {
+            if (volume) {
+                this.audio.volume = 0
+                volume = false;
+            } else {
+                this.audio.volume = 1
+                volume = true;
+            }
+        })
+
+        document.getElementById('play-or-pause').addEventListener('click', () => {
+            if (this.audio.isPlaying) {
+                this.audio.pause()
+            } else {
+                this.audio.play()
+            }
+        })
+
+        document.getElementById('fullScreen').addEventListener('click', function () {
+            var target = document.body
+
+            if(target.webkitRequestFullScreen) {
+                target.webkitRequestFullScreen()
+            }
+            else {
+                target.mozRequestFullScreen()
+            }
+        });
     }
 
     onWindowResize() {

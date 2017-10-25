@@ -40,7 +40,7 @@ export default class Ellipse {
         this.line.rotation.x += Math.cos(rotationValue) * counter
     }
 
-    update(time) {
-        this.material.uniforms.u_time.value = time
+    update(value) {
+        this.material.uniforms.u_time.value = value
     }
 }
