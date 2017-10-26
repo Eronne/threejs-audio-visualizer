@@ -5,12 +5,12 @@ import music from './../assets/sounds/music.mp3'
 
 let OrbitControls = require('three-orbit-controls')(THREE),
     Stats = require('stats.js'),
-    nbEllipse = 180,
+    nbEllipse = 105,
     arrayEllipse = [],
     rotationValue = 10,
     time = 0,
     enableRotation = true,
-    playSound = true,
+    playSound = false,
     volume = true,
     debug = false;
 
@@ -27,7 +27,6 @@ export default class App {
         }
 
     	window.addEventListener('resize', this.onWindowResize.bind(this), false);
-        this.onWindowResize();
     }
 
     createScene() {
@@ -53,13 +52,38 @@ export default class App {
 
     createEllipse() {
         this.groupEllipse = new THREE.Group();
+        this.shapeSlider = document.getElementById('shape');
 
         for (let i = 0; i < nbEllipse; i++) {
-            let ellipse = new Ellipse(0, 0, 10, 10, 0, 2* Math.PI, false, 0, rotationValue, i)
+            let ellipse = new Ellipse(0, 0, 10, 10, 0, 2 * Math.PI, false, 0, rotationValue, i, this.shapeSlider.value)
             arrayEllipse.push(ellipse);
             this.groupEllipse.add( ellipse.line );
-            this.scene.add(this.groupEllipse)
         }
+
+        this.scene.add(this.groupEllipse)
+
+
+        this.changeShape()
+    }
+
+    clearEllipseGroup() {
+        arrayEllipse = []
+        
+        for (let i = 0; i < nbEllipse; i++) {
+            this.groupEllipse.remove(this.groupEllipse.children[0])
+        }
+    }
+
+    changeShape() {
+        this.shapeSlider.addEventListener('change', () => {
+            this.clearEllipseGroup()
+
+            for (let i = 0; i < nbEllipse; i++) {
+                let ellipse = new Ellipse(0, 0, 10, 10, 0, 2 * Math.PI, false, 0, rotationValue, i, this.shapeSlider.value)
+                arrayEllipse.push(ellipse);
+                this.groupEllipse.add( ellipse.line );
+            }
+        })
     }
 
     renderer() {
@@ -104,18 +128,7 @@ export default class App {
         } else {
             this.audio = new Sound(music, null, null, null, false);
         }
-        this.kick = this.audio.createKick({
-            frequency: [100, 120],
-            threshold: 55,
-            decay: 1,
-            onKick: () => {
-
-            },
-            offKick: () => {
-                
-            }
-        })
-        this.kick.on();
+        
         if (playSound) {
             this.audio._load(music, () => {
                 this.audio.play();
@@ -124,14 +137,6 @@ export default class App {
     }
 
     importControls() {
-        document.addEventListener('mousemove', () => {
-            let controls = document.getElementById('controls');
-            controls.classList.add("visible")
-
-            let author = document.getElementById('author');
-            author.classList.add("visible")
-        })
-
         document.getElementById('mute').addEventListener('click', () => {
             if (volume) {
                 this.audio.volume = 0

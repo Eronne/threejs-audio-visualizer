@@ -1,4 +1,5 @@
 uniform float u_time;
+uniform float shape;
 
 
 #include <common>
@@ -136,7 +137,7 @@ void main() {
 
 	#include <begin_vertex>
 
-	transformed.xy += (snoise(u_time + transformed * .03) * 3.);
+	transformed.xy += (snoise(u_time + transformed * shape) * 3.);
 
 	#include <morphtarget_vertex>
 	#include <skinning_vertex>

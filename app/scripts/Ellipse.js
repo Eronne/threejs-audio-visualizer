@@ -3,7 +3,7 @@ import fragment from '../shaders/line.frag'
 
 export default class Ellipse {
 
-    constructor(aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation, rotationValue, counter) {
+    constructor(aX, aY, xRadius, yRadius, aStartAngle, aEndAngle, aClockwise, aRotation, rotationValue, counter, shape) {
         this.curve = new THREE.EllipseCurve(
             aX, aY,
             xRadius, yRadius,
@@ -24,14 +24,13 @@ export default class Ellipse {
                 THREE.UniformsLib.fog,
                 { 
                     diffuse: { value: new THREE.Color( 0xd2a0a4 ) },
-                    u_time: { value: 1.0, type: 'f' }
+                    u_time: { value: 1.0, type: 'f' },
+                    shape: { value: shape }
                  }
             ] ),
             defines: {
                 USE_ENVMAP: true
             },
-                // Todo: Change color
-                // color : 0xd2a0a4
             vertexShader: vertex,
             fragmentShader: fragment
         } );

@@ -3,15 +3,12 @@ html, body {
     margin: 0;
     padding: 0;
 
+    background: #f3d3d3;
     font-family: sans-serif;
 }
 
 #main {
     background: #f3d3d3;
-}
-
-.hidden {
-    opacity: 0
 }
 
 .controls {
@@ -29,7 +26,7 @@ button {
     margin-left: 15px;
     background-color: transparent;
     border: none;
-    opacity: 0.3;
+    opacity: 0.2;
     outline: none;
     transition: all 0.3s ease;
 }
