@@ -10,7 +10,8 @@ let OrbitControls = require('three-orbit-controls')(THREE),
     rotationValue = 10,
     time = 0,
     enableRotation = true,
-    playSound = false,
+    fullScreen = false,
+    playSound = true,
     volume = true,
     debug = false;
 
@@ -41,8 +42,8 @@ export default class App {
         this.camera.position.z = 30;
 
         let controls = new OrbitControls(this.camera, this.container)
-        controls.minDistance = 10;
-        controls.maxDistance = 40;
+        controls.minDistance = 20;
+        controls.maxDistance = 30;
 		controls.enableDamping = true;
 		controls.dampingFactor = 0.07;
 		controls.rotateSpeed = 0.07;
@@ -64,24 +65,13 @@ export default class App {
 
 
         this.changeShape()
-    }
-
-    clearEllipseGroup() {
-        arrayEllipse = []
-        
-        for (let i = 0; i < nbEllipse; i++) {
-            this.groupEllipse.remove(this.groupEllipse.children[0])
-        }
-    }
+    } 
 
     changeShape() {
         this.shapeSlider.addEventListener('change', () => {
-            this.clearEllipseGroup()
-
             for (let i = 0; i < nbEllipse; i++) {
-                let ellipse = new Ellipse(0, 0, 10, 10, 0, 2 * Math.PI, false, 0, rotationValue, i, this.shapeSlider.value)
-                arrayEllipse.push(ellipse);
-                this.groupEllipse.add( ellipse.line );
+                let ellipse = arrayEllipse[i]
+                ellipse.changeShape(this.shapeSlider.value)
             }
         })
     }
@@ -137,6 +127,11 @@ export default class App {
     }
 
     importControls() {
+        let muteButton =  document.getElementById('mute')
+        muteButton.addEventListener('click', () => {
+            muteButton.classList.toggle('visible')
+        })
+
         document.getElementById('mute').addEventListener('click', () => {
             if (volume) {
                 this.audio.volume = 0
@@ -147,24 +142,57 @@ export default class App {
             }
         })
 
-        document.getElementById('play-or-pause').addEventListener('click', () => {
+        let playOrPauseButton = document.getElementById('play-or-pause')
+
+        playOrPauseButton.addEventListener('click', () => {
             if (this.audio.isPlaying) {
                 this.audio.pause()
+                playOrPauseButton.src="app/assets/img/play.svg"
             } else {
                 this.audio.play()
+                playOrPauseButton.src="app/assets/img/pause.svg"
             }
         })
 
-        document.getElementById('fullScreen').addEventListener('click', function () {
-            var target = document.body
+        let fullScreenButton = document.getElementById('fullScreen')
+        fullScreenButton.addEventListener('click', function () {
+            if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) {
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+    
+            } else {
+                if (document.cancelFullScreen) {
+                    document.cancelFullScreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitCancelFullScreen) {
+                    document.webkitCancelFullScreen();
+                }
+            }
 
-            if(target.webkitRequestFullScreen) {
-                target.webkitRequestFullScreen()
-            }
-            else {
-                target.mozRequestFullScreen()
-            }
+            fullScreenButton.classList.toggle('visible')
         });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.target.nodeName.toLowerCase() !== 'input' && e.target.type !== 'text') {
+                if(e.keyCode === 32) {
+                    playOrPauseButton.click()
+                }
+
+                if(e.keyCode === 70) {
+                    fullScreenButton.click()
+                }
+
+                if(e.keyCode === 77) {
+                    muteButton.click()
+                }
+            }
+        })
     }
 
     onWindowResize() {

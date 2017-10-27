@@ -42,4 +42,9 @@ export default class Ellipse {
     update(value) {
         this.material.uniforms.u_time.value = value
     }
+
+    changeShape(value) {
+        this.material.uniforms.shape.value = value
+        this.material.needsUpdate = true
+    }
 }

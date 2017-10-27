@@ -16,28 +16,113 @@ html, body {
     margin-right: 15px;
     position: absolute;
     right: 0;
+    width: 170px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .visible {
     opacity: 1;
 }
 
+.hidden {
+    display: none
+}
+
 button {
     margin-left: 15px;
     background-color: transparent;
     border: none;
-    opacity: 0.2;
     outline: none;
     transition: all 0.3s ease;
 }
 
-button:hover {
+button:first-of-type {
+    margin: 0;
+}
+
+button:last-of-type {
+    margin-right: 20px
+}
+
+img {
+    opacity: 0.5;
+    padding: 10px;
+}
+
+img:hover, input[type='range']:hover {
     cursor: pointer;
     opacity: 1;
 }
 
-img {
-    padding: 10px;
+input[type='range'], input[type='range']::-webkit-slider-runnable-track, input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    } 
+input[type='range'] {
+width: 100px;
+height: 30px;
+background: transparent;
+font-size: 12px;
+opacity: 0.5;
+outline: none;
+transition: all 0.3s ease;
+}
+input[type='range']::-webkit-slider-runnable-track {
+margin: 0 0.75em;
+border: none;
+padding: 0 0.125em;
+width: 20em;
+height: 0.25em;
+border-radius: 0.125em;
+background: #d2a0a4;
+}
+input[type='range']::-moz-range-track {
+border: none;
+padding: 0 0.125em;
+width: 20em;
+height: 0.25em;
+border-radius: 0.125em;
+background: #d2a0a4;
+}
+input[type='range']::-ms-track {
+margin: 0 0.75em;
+border: none;
+padding: 0 0.125em;
+width: 20em;
+height: 0.25em;
+border-radius: 0.125em;
+background: #d2a0a4;
+color: transparent;
+}
+input[type='range']::-webkit-slider-thumb {
+margin-top: -0.625em;
+box-sizing: border-box;
+border: solid 0.25em #f3d3d3;
+width: 1.5em;
+height: 1.5em;
+border-radius: 50%;
+background: #d2a0a4;
+transition: .3s;
+}
+input[type='range']::-moz-range-thumb {
+box-sizing: border-box;
+border: solid 0.25em #f3d3d3;
+width: 1.5em;
+height: 1.5em;
+border-radius: 50%;
+background: #d2a0a4;
+transition: .3s;
+cursor: ew-resize;
+}
+input[type='range']::-ms-thumb {
+box-sizing: border-box;
+border: solid 0.25em #f3d3d3;
+width: 1.5em;
+height: 1.5em;
+border-radius: 50%;
+background: #5c5c5c;
+transition: .3s;
 }
 
 .author {
