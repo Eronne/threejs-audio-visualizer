@@ -113,17 +113,28 @@ export default class App {
     }
 
     importAudio() {
-        if (debug) {
-            this.audio = new Sound(music, null, null, null, true);
-        } else {
-            this.audio = new Sound(music, null, null, null, false);
-        }
-        
-        if (playSound) {
-            this.audio._load(music, () => {
-                this.audio.play();
-            })
-        }
+
+        this.audio = new Sound(music, null, null, () => {
+            console.log(this.audio.progress)
+
+            if (playSound) {
+                let landingPage = document.getElementById('landing')
+                let loading = document.getElementById('loader')
+                let landingButton = document.getElementById('landingButton')
+                let controls = document.getElementById('controls')
+
+                this.audio._load(music, () => {
+                    loading.classList.add('hidden');
+                    landingButton.classList.remove('hidden');
+                    
+                    landingButton.addEventListener('click', () => {
+                        landingPage.style.display="none";
+                        controls.classList.remove('hidden');
+                        this.audio.play();
+                    })
+                })
+            }
+        }, debug);
     }
 
     importControls() {

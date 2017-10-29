@@ -9,6 +9,14 @@ html, body {
     font-family: 'Lato', sans-serif;
 }
 
+.visible {
+    opacity: 1;
+}
+
+.hidden {
+    opacity: 0;
+}
+
 #main {
     background: #f3d3d3;
 }
@@ -23,12 +31,102 @@ html, body {
     text-align: center;
     text-transform: uppercase;
     color: #d2a0a4;
+    background: #f3d3d3;
     z-index: 10;
 }
 
 h1 {
     margin: 0;
 }
+
+
+
+
+
+  *,
+  *:after,
+  *:before {
+    box-sizing: border-box;
+  }
+  
+  #loader {
+    position: absolute;
+    left: 50%;
+    top: 56.5%;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+  }
+  #loader .spinnerBlock {
+    -webkit-animation: rotate 1400ms linear 600ms infinite;
+            animation: rotate 1400ms linear 600ms infinite;
+    -webkit-transform-origin: center;
+            transform-origin: center;
+    display: block;
+    height: 70px;
+    width: 70px;
+  }
+  #loader span {
+    display: block;
+    border: 2px solid #d2a0a4;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  #loader span:nth-child(1) {
+    left: -18px;
+    top: 10px;
+  }
+  #loader span:nth-child(2) {
+    left: -18px;
+    top: -10px;
+  }
+  #loader span:nth-child(3) {
+    left: 0;
+    top: -18px;
+  }
+  #loader span:nth-child(4) {
+    left: 18px;
+    top: -10px;
+  }
+  #loader span:nth-child(5) {
+    left: 18px;
+    top: 10px;
+  }
+  #loader span:nth-child(6) {
+    left: 0;
+    top: 18px;
+  }
+  @-webkit-keyframes rotate {
+    from {
+      -webkit-transform: rotate(0deg);
+              transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+              transform: rotate(360deg);
+    }
+  }
+  @keyframes rotate {
+    from {
+      -webkit-transform: rotate(0deg);
+              transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+              transform: rotate(360deg);
+    }
+  }
+  
+
+
+
+
+
+
+
 
 #landingButton {
     margin: 0;
@@ -42,13 +140,13 @@ h1 {
 
 .pulse-button {
     display: block;
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     font-size: 1.3em;
     font-weight: light;
     text-transform: uppercase;
     text-align: center;
-    line-height: 100px;
+    line-height: 120px;
     color: #f3d3d3;
     border: none;
     border-radius: 50%;
@@ -56,7 +154,7 @@ h1 {
     cursor: pointer;
     box-shadow: 0 0 0 0 rgba(210, 160, 164, 0.5);
     -webkit-animation: pulse 1.5s infinite;
-  }
+}
   
   @-webkit-keyframes pulse {
     0% {
@@ -79,8 +177,7 @@ h1 {
       transform: scale(0.9);
       box-shadow: 0 0 0 0 rgba(90, 153, 212, 0);
     }
-  }
-  
+}
 
 .controls {
     margin-top: 15px;
@@ -91,14 +188,6 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-}
-
-.visible {
-    opacity: 1;
-}
-
-.hidden {
-    display: none;
 }
 
 button {
@@ -204,6 +293,7 @@ transition: .3s;
     width: 100%;
     color: #d2a0a4;
     font-size: 12px;
+    z-index: 10;
 }
 
 .separator {
